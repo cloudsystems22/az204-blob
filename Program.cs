@@ -8,7 +8,7 @@ namespace AzureBlobContainers
     class Program
     {
 
-        public static string storageConnectionString = "DefaultEndpointsProtocol=https;AccountName=mystorageaz204rg;AccountKey=iURHrX3wfhLjAEiUxjKZlp9SC05AP2lP5s83ymuIHjCv+4HybLS7ujiHZQzfxv0bpYf0ygYfe940+ASt+e21Rg==;EndpointSuffix=core.windows.net";
+        public static string storageConnectionString = "";
         public static BlobServiceClient blobServiceClient = new BlobServiceClient(storageConnectionString);
         public static string localPath = "./data/";
 
