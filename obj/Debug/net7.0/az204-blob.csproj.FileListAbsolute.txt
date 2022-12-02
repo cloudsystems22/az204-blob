@@ -20,3 +20,12 @@ C:\AZ-204\blobStorage01\az204-blob\bin\Debug\net7.0\Microsoft.Bcl.AsyncInterface
 C:\AZ-204\blobStorage01\az204-blob\bin\Debug\net7.0\System.IO.Hashing.dll
 C:\AZ-204\blobStorage01\az204-blob\bin\Debug\net7.0\System.Memory.Data.dll
 C:\AZ-204\blobStorage01\az204-blob\obj\Debug\net7.0\az204-blob.csproj.CopyComplete
+C:\AZ-204\blobStorage01\az204-blob\bin\Debug\net7.0\appsettings.json
+C:\AZ-204\blobStorage01\az204-blob\bin\Debug\net7.0\Microsoft.Extensions.Configuration.dll
+C:\AZ-204\blobStorage01\az204-blob\bin\Debug\net7.0\Microsoft.Extensions.Configuration.Abstractions.dll
+C:\AZ-204\blobStorage01\az204-blob\bin\Debug\net7.0\Microsoft.Extensions.Configuration.FileExtensions.dll
+C:\AZ-204\blobStorage01\az204-blob\bin\Debug\net7.0\Microsoft.Extensions.Configuration.Json.dll
+C:\AZ-204\blobStorage01\az204-blob\bin\Debug\net7.0\Microsoft.Extensions.FileProviders.Abstractions.dll
+C:\AZ-204\blobStorage01\az204-blob\bin\Debug\net7.0\Microsoft.Extensions.FileProviders.Physical.dll
+C:\AZ-204\blobStorage01\az204-blob\bin\Debug\net7.0\Microsoft.Extensions.FileSystemGlobbing.dll
+C:\AZ-204\blobStorage01\az204-blob\bin\Debug\net7.0\Microsoft.Extensions.Primitives.dll

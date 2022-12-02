@@ -2,13 +2,18 @@
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using System.IO;
+using Microsoft.Extensions.Configuration;
 
 namespace AzureBlobContainers
 {
     class Program
     {
 
-        public static string storageConnectionString = "";
+        public static IConfiguration builder = new ConfigurationBuilder()
+                 .AddJsonFile($"appsettings.json", true, true)
+                 .Build();
+
+        public static string storageConnectionString = builder["StorageConnectionString"];
         public static BlobServiceClient blobServiceClient = new BlobServiceClient(storageConnectionString);
         public static string localPath = "./data/";
 
@@ -16,6 +21,7 @@ namespace AzureBlobContainers
 
         public static async Task Main(string[] args)
         {
+            Console.Clear();
             Console.WriteLine(":::::::::::::::::::::::::::::::::::::::::::::::::");
             Console.WriteLine("::                                             ::");
             Console.WriteLine("::       Aplicativo para Blob Containers       ::");
@@ -32,6 +38,9 @@ namespace AzureBlobContainers
 
             string Result(){
                 Console.WriteLine("");
+                Console.WriteLine(":::::::::::::::::::::::::::::::::::::::::::::::::");
+                Console.WriteLine("::             Menu comandos Azure             ::");
+                Console.WriteLine(":::::::::::::::::::::::::::::::::::::::::::::::::");
                 Console.WriteLine("1 - Criar novo container;");
                 Console.WriteLine("2 - Upload de novo Arquivo;");
                 Console.WriteLine("3 - Download de Arquivo;");
@@ -39,6 +48,8 @@ namespace AzureBlobContainers
                 Console.WriteLine("5 - Listar arquivos;");
                 Console.WriteLine("6 - Apagar container;");
                 Console.WriteLine("0 - Sair;");
+                Console.WriteLine(":::::::::::::::::::::::::::::::::::::::::::::::::");
+                Console.WriteLine("Entre com valor numérico (Ex:1):...");
                 return Console.ReadLine();
             }
 
@@ -85,6 +96,7 @@ namespace AzureBlobContainers
                      default:
                          Console.Write($"{Environment.NewLine}Agora pressione qualquer tecla para sair...");
                          Console.ReadKey(true);
+                         Console.Clear();
                          menuExec = false;
                          break;
                     }
@@ -98,57 +110,91 @@ namespace AzureBlobContainers
         private static async Task CreateContainer()
         {
             // Create the container and return a container client object
+            Console.Clear();
             Console.WriteLine("");
-            Console.WriteLine("Criar novo container::...");
+            Console.WriteLine(":::::::::::::::::::::::::::::::::::::::::::::::::");
+            Console.WriteLine("::             Menu comandos Azure             ::");
+            Console.WriteLine("::             Criar novo container            ::");
+            Console.WriteLine(":::::::::::::::::::::::::::::::::::::::::::::::::");
             Console.WriteLine("Entre com um nome");
             string containerName = Console.ReadLine();
 
-            BlobContainerClient containerClient = await blobServiceClient.CreateBlobContainerAsync(containerName);
-            Console.WriteLine($"Um container nomeado '{containerName}' foi criado verifique o portal.");
-            Console.WriteLine("Press 'Enter' para continuar.");
-            Console.ReadLine();
+            try
+            {
+                 BlobContainerClient containerClient = await blobServiceClient.CreateBlobContainerAsync(containerName);
+                 Console.WriteLine($"Um container nomeado '{containerName}' foi criado verifique o portal.");
+                 Console.WriteLine("Press 'Enter' para retornar ao menu.");
+                 Console.ReadLine();
+                 Console.Clear();
+            } catch(Exception ex)
+            {
+                 Console.WriteLine($"Erro {ex.Message}");
+                 Console.WriteLine("Press 'Enter' para retornar ao menu.");
+                 Console.ReadLine();
+                 Console.Clear();
+            }
+
+           
         }
 
         private static async Task LoadFile()
         {
 
             // Create a local file in the ./data/ directory for uploading and downloading
+            Console.Clear();
             Console.WriteLine("");
-            Console.WriteLine("Selecione o container::...");
+            Console.WriteLine(":::::::::::::::::::::::::::::::::::::::::::::::::");
+            Console.WriteLine("::           Selecione um container            ::");
+            Console.WriteLine(":::::::::::::::::::::::::::::::::::::::::::::::::");
             Console.WriteLine("Entre com um nome");
             string containerName = Console.ReadLine();
-            BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerName);
+            try
+            {
+                BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerName);
 
-            Console.WriteLine("");
-            Console.WriteLine("Upload de novo Arquivo::...");
-            Console.WriteLine("Entre com um nome");
-            string fileName = Console.ReadLine();
+                Console.WriteLine("");
+                Console.WriteLine("Upload de novo Arquivo::...");
+                Console.WriteLine("Entre com um nome");
+                string fileName = Console.ReadLine();
 
+                string file = $"{fileName}.txt";
+                string localFilePath = Path.Combine(localPath, file);
+
+                // Write text to the file
+                await File.WriteAllTextAsync(localFilePath, "Hello, World!");
+
+                // Get a reference to the blob
+                BlobClient blobClient = containerClient.GetBlobClient(file);
+
+                Console.WriteLine("Uploading to Blob storage as blob:\n\t {0}\n", blobClient.Uri);
+
+                // Open the file and upload its data
+                using FileStream uploadFileStream = File.OpenRead(localFilePath);
+                await blobClient.UploadAsync(uploadFileStream, true);
+
+                Console.WriteLine("Upload de arquivo completo. Verifique listando");
+                Console.WriteLine("Press 'Enter' para retornar ao menu.");
+                Console.ReadLine();
+                Console.Clear();
+
+            } catch(Exception ex)
+            {
+                Console.WriteLine($"Erro {ex.Message}");
+                Console.WriteLine("Press 'Enter' para retornar ao menu.");
+                Console.ReadLine();
+                Console.Clear();
+
+            }
             
-            string file = $"{fileName}.txt";
-            string localFilePath = Path.Combine(localPath, file);
-
-            // Write text to the file
-            await File.WriteAllTextAsync(localFilePath, "Hello, World!");
-
-            // Get a reference to the blob
-            BlobClient blobClient = containerClient.GetBlobClient(file);
-
-            Console.WriteLine("Uploading to Blob storage as blob:\n\t {0}\n", blobClient.Uri);
-
-            // Open the file and upload its data
-            using FileStream uploadFileStream = File.OpenRead(localFilePath);
-            await blobClient.UploadAsync(uploadFileStream, true);
-
-            Console.WriteLine("Upload de arquivo completo. Verifique listando");
-            Console.WriteLine("Press 'Enter' para continuar.");
-            Console.ReadLine();
         }
 
         async static Task ListContainers()
         {
+            Console.Clear();
             Console.WriteLine("");
-            Console.WriteLine("Listar containers::......");
+            Console.WriteLine(":::::::::::::::::::::::::::::::::::::::::::::::::");
+            Console.WriteLine("::              Listar containers              ::");
+            Console.WriteLine(":::::::::::::::::::::::::::::::::::::::::::::::::");
             Console.WriteLine("");
            // Call the listing operation and enumerate the result segment.
             var resultSegment = 
@@ -164,90 +210,143 @@ namespace AzureBlobContainers
     
                 Console.WriteLine("------------------------------------------------------");
             }
-            Console.WriteLine("Press 'Enter' para continuar.");
+            Console.WriteLine("Press 'Enter' para retornar ao menu.");
             Console.ReadLine();
+            Console.Clear();
         }
 
         async static Task ListBlobs()
         {
             // List blobs in the container
+            Console.Clear();
             Console.WriteLine("");
-            Console.WriteLine("Listar arquivos::......");
+            Console.WriteLine(":::::::::::::::::::::::::::::::::::::::::::::::::");
+            Console.WriteLine("::               Listar Arquivos               ::");
+            Console.WriteLine(":::::::::::::::::::::::::::::::::::::::::::::::::");
             Console.WriteLine("");
 
             Console.WriteLine("Selecione o container::...");
             Console.WriteLine("Entre com um nome");
             string containerName = Console.ReadLine();
-            BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerName);
 
-            await foreach (BlobItem blobItem in containerClient.GetBlobsAsync())
+            try
             {
-                Console.WriteLine($"file: {blobItem.Name}");
+                BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerName);
+
                 Console.WriteLine("---------------------------------");
+                await foreach (BlobItem blobItem in containerClient.GetBlobsAsync())
+                {
+                    Console.WriteLine($"file: {blobItem.Name}");
+                    Console.WriteLine("---------------------------------");
+                }
+
+                Console.WriteLine("Press 'Enter' para retornar ao menu.");
+                Console.ReadLine();
+                Console.Clear();
+
+            } catch(Exception ex)
+            {
+                Console.WriteLine($"Erro {ex.Message}");
+                Console.WriteLine("Press 'Enter' para retornar ao menu.");
+                Console.ReadLine();
+                Console.Clear();
+
             }
 
-            Console.WriteLine("Press 'Enter' para continuar.");
-            Console.ReadLine();
+            
         }
 
         async static Task DownloadFile(){
             // Download the blob to a local file
             // Append the string "DOWNLOADED" before the .txt extension 
+            Console.Clear();
             Console.WriteLine("");
-            Console.WriteLine("Download de Arquivo::...");
+            Console.WriteLine(":::::::::::::::::::::::::::::::::::::::::::::::::");
+            Console.WriteLine("::             Downloade de Arquivo            ::");
+            Console.WriteLine(":::::::::::::::::::::::::::::::::::::::::::::::::");
             Console.WriteLine("");
 
             Console.WriteLine("Selecione o container::...");
             Console.WriteLine("Entre com um nome");
             string containerName = Console.ReadLine();
-            BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerName);
 
-            Console.WriteLine("Entre com o nome do arquivo");
-            string fileName = Console.ReadLine();
-
-            
-            string file = $"{fileName}.txt";
-            
-            string localFilePath = Path.Combine(localPath, file);
-            string downloadFilePath = localFilePath.Replace(".txt", "DOWNLOADED.txt");
-
-            Console.WriteLine("\nDownloading blob para\n\t{0}\n", downloadFilePath);
-
-            BlobClient blobClient = containerClient.GetBlobClient(file);
-
-            // Download the blob's contents and save it to a file
-            BlobDownloadInfo download = await blobClient.DownloadAsync();
-
-            using (FileStream downloadFileStream = File.OpenWrite(downloadFilePath))
+            try
             {
-                await download.Content.CopyToAsync(downloadFileStream);
+                 BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerName);
+
+                 Console.WriteLine("Entre com o nome do arquivo");
+                 string fileName = Console.ReadLine();
+     
+                 
+                 string file = $"{fileName}.txt";
+                 
+                 string localFilePath = Path.Combine(localPath, file);
+                 string downloadFilePath = localFilePath.Replace(".txt", "DOWNLOADED.txt");
+     
+                 Console.WriteLine("\nDownloading blob para\n\t{0}\n", downloadFilePath);
+     
+                 BlobClient blobClient = containerClient.GetBlobClient(file);
+     
+                 // Download the blob's contents and save it to a file
+                 BlobDownloadInfo download = await blobClient.DownloadAsync();
+     
+                 using (FileStream downloadFileStream = File.OpenWrite(downloadFilePath))
+                 {
+                     await download.Content.CopyToAsync(downloadFileStream);
+                 }
+                 Console.WriteLine("\nLocalize o arquivo local no diretório de dados criado anteriormente para verificar se foi baixado.");
+                 Console.WriteLine("Press 'Enter' para retornar ao menu.");
+                 Console.ReadLine();
+                 Console.Clear();
+
+            } catch(Exception ex)
+            {
+                Console.WriteLine($"Erro {ex.Message}");
+                Console.WriteLine("Press 'Enter' para retornar ao menu.");
+                Console.ReadLine();
+                Console.Clear();
+
             }
-            Console.WriteLine("\nLocalize o arquivo local no diretório de dados criado anteriormente para verificar se foi baixado.");
-            Console.WriteLine("Press 'Enter' para continue.");
-            Console.ReadLine();
+
         }
 
         async static Task DeleteContainer()
         {
             // Delete the container and clean up local files created
+            Console.Clear();
             Console.WriteLine("");
-            Console.WriteLine("Apagar container::...");
+            Console.WriteLine(":::::::::::::::::::::::::::::::::::::::::::::::::");
+            Console.WriteLine("::               Apagar container              ::");
+            Console.WriteLine(":::::::::::::::::::::::::::::::::::::::::::::::::");
             Console.WriteLine("");
 
             Console.WriteLine("Selecione o container::...");
             Console.WriteLine("Entre com um nome");
             string containerName = Console.ReadLine();
-            BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerName);
-            await containerClient.DeleteAsync();
+            try{
+                BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerName);
+                await containerClient.DeleteAsync();
+                Console.WriteLine("Excluindo a fonte local e os arquivos baixados...");
+                foreach(FileInfo file in di.GetFiles())
+                {
+                    file.Delete();
+                }
 
-            Console.WriteLine("Excluindo a fonte local e os arquivos baixados...");
-            foreach(FileInfo file in di.GetFiles())
+                Console.WriteLine("Terminada a limpeza.");
+                Console.WriteLine("Press 'Enter' para retornar ao menu.");
+                Console.ReadLine();
+                Console.Clear();
+
+            } catch(Exception ex)
             {
-                file.Delete();
+                Console.WriteLine($"Erro {ex.Message}");
+                Console.WriteLine("Press 'Enter' para retornar ao menu.");
+                Console.ReadLine();
+                Console.Clear();
             }
 
-            Console.WriteLine("Terminada a limpeza.");
 
+            
         }
        
     }
