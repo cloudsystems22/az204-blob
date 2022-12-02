@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "hKrZ612tjFM3FDjV93TDU/7d7XeobEFJiG4fdure8r1i1sHatFu7jE7i3g7XQHPYUNViICvg3zQWSxq74Ri3vw==",
+  "dgSpecHash": "DFmTm5q9EgnnXvFibBE5C8rXGbhnLKJjUBphFBxuyd+r6mGrA5lnB+HvH3UCjhw5CXCG4wPabpZ5iluOuJc/4g==",
   "success": true,
-  "projectFilePath": "C:\\AZ-204\\blobStorage01\\az204-blob\\az204-blob.csproj",
+  "projectFilePath": "c:\\AZ-204\\blobStorage01\\az204-blob\\az204-blob.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\a.david.fico.neto\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",
     "C:\\Users\\a.david.fico.neto\\.nuget\\packages\\azure.storage.blobs\\12.14.1\\azure.storage.blobs.12.14.1.nupkg.sha512",

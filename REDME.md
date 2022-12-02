@@ -7,5 +7,5 @@
 ### Dependências
 dotnet add package Azure.Storage.Blobs
 
-dotnet add package Microsoft.Extensions.Configuration
+dotnet add package Microsoft.Extensions.Configuration </br>
 dotnet add package Microsoft.Extensions.Configuration.Json

@@ -345,8 +345,6 @@ namespace AzureBlobContainers
                 Console.Clear();
             }
 
-
-            
         }
        
     }

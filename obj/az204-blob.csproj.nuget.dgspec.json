@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\AZ-204\\blobStorage01\\az204-blob\\az204-blob.csproj": {}
+    "c:\\AZ-204\\blobStorage01\\az204-blob\\az204-blob.csproj": {}
   },
   "projects": {
-    "C:\\AZ-204\\blobStorage01\\az204-blob\\az204-blob.csproj": {
+    "c:\\AZ-204\\blobStorage01\\az204-blob\\az204-blob.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\AZ-204\\blobStorage01\\az204-blob\\az204-blob.csproj",
+        "projectUniqueName": "c:\\AZ-204\\blobStorage01\\az204-blob\\az204-blob.csproj",
         "projectName": "az204-blob",
-        "projectPath": "C:\\AZ-204\\blobStorage01\\az204-blob\\az204-blob.csproj",
+        "projectPath": "c:\\AZ-204\\blobStorage01\\az204-blob\\az204-blob.csproj",
         "packagesPath": "C:\\Users\\a.david.fico.neto\\.nuget\\packages\\",
-        "outputPath": "C:\\AZ-204\\blobStorage01\\az204-blob\\obj\\",
+        "outputPath": "c:\\AZ-204\\blobStorage01\\az204-blob\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
